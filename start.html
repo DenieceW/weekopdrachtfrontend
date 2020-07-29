@@ -14,46 +14,118 @@
             objJSON = JSON.stringify(obj);
 
             let xhr = new XMLHttpRequest();
-            xhr.open("POST",  "http://localhost:8082/api/employee/new", true); //asynchroon 2
+            xhr.open("POST", "http://localhost:8082/api/employee/new", true); //asynchroon 2
             xhr.setRequestHeader("Content-Type", "application/json")
             xhr.send(objJSON); //3
-            console.log("employee toegevoegd");
+            alert(obj.name + " is toegevoegd")
         }
 
         function verwijderen() {
             let obj = {};
             obj.id = document.getElementById("id-employee").value;
             objJSON = JSON.stringify(obj);
-            console.log(obj.id)
 
             let xhr = new XMLHttpRequest();
-            xhr.open("DELETE", "http://localhost:8082/api/employee/delete/" + obj.id , true); //asynchroon 2
+            xhr.open("DELETE", "http://localhost:8082/api/employee/delete/" + obj.id, true); //asynchroon 2
             xhr.setRequestHeader("Content-Type", "application/json")
             xhr.send(objJSON); //3
-            console.log("employee verwijderd");
+
         }
+
+        function allemployees() {
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4) {
+                    var hetObject = JSON.parse(this.responseText);
+                    console.log(hetObject);
+                    var employeeString = "";
+                    for (x in hetObject) {
+                        employeeString +=
+                            `<div>
+                        <table>
+                            <tr>
+                                <td> ID: ${hetObject[x].id}</td>
+                            </tr>  
+                            <tr>
+                                <td> Naam: ${hetObject[x].name} </td>
+                            </tr>
+                            <tr>
+                                <td> Salaris: ${hetObject[x].salary}</td>
+                            </tr>      
+                        </table>    
+                        </div>
+                        `
+                    }
+                }
+                document.getElementById("all-employees").innerHTML = employeeString;
+
+            }
+            xhr.open("GET", "http://localhost:8082/api/employee/all", true); // asynchroon
+            xhr.send();
+        }
+
+        function updatesalaris() {
+            let obj = {};
+            obj.id = document.getElementById("employee_id").value
+            obj.salary = document.getElementById("update-salaris").value;
+            objJSON = JSON.stringify(obj);
+
+            let xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+
+            }
+            xhr.open("PUT", "http://localhost:8082/api/employee/updatesalary/" + obj.id, true); //asynchroon 2
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.send(objJSON); //3
+
+
+        }
+
+
 
     </script>
 </head>
 
 <body>
     <div id="add-employee">
+        <h3>Voeg een medewerker toe</h3>
         <form>
             <input type="naam" id=naam value="Naam">
             <br>
             <input type="salaris" id=salaris value="Salaris">
-            <input type=button onclick="posten()" value="employee toevoegen">
+            <input type=button onclick="posten()" value="medewerker toevoegen">
         </form>
     </div>
 
     <br>
 
     <div id="remove-employee">
+        <h3>Verwijder een medewerker</h3>
         <form>
-            <input type="id" id=id-employee value="id-employee">
-            <input type=button onclick="verwijderen()" value="employee verwijderen">
+            <input type="id" id=id-employee value="medewerker ID">
+            <input type=button onclick="verwijderen()" value="medewerker verwijderen">
         </form>
     </div>
+
+    <br>
+
+    <div>
+        <h3>Pas de salaris aan van een medewerker</h3>
+        <form>
+            <input id=employee_id value="id">
+            <input id="update-salaris" value="Update salaris">
+            <input type=button onclick="updatesalaris()" value="verander salaris">
+        </form>
+    </div>
+    <br>
+    <div>
+        <form>
+            <h3></h3>
+            <input type=button onclick="allemployees()" value="Laat alle medewerkers zien">
+            <p id="all-employees"></p>
+        </form>
+    </div>
+
 
 </body>
 
