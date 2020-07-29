@@ -39,21 +39,21 @@
                     var hetObject = JSON.parse(this.responseText);
                     console.log(hetObject);
                     var employeeString = "";
+
                     for (x in hetObject) {
                         employeeString +=
-                            `<div>
-                        <table>
-                            <tr>
-                                <td> ID: ${hetObject[x].id}</td>
+                            `
+                            <table border='1'>
+                            <th>ID</th>
+                            <th>Naam</th>
+                            <th>Salaris</th>
+                            <tr>  
+                                <td> ${hetObject[x].id}</td>
+                                <td>${hetObject[x].name} </td>
+                                <td>${hetObject[x].salary}</td>
                             </tr>  
-                            <tr>
-                                <td> Naam: ${hetObject[x].name} </td>
-                            </tr>
-                            <tr>
-                                <td> Salaris: ${hetObject[x].salary}</td>
-                            </tr>      
-                        </table>    
-                        </div>
+                        </table> 
+                        <br>        
                         `
                     }
                 }
@@ -62,6 +62,10 @@
             }
             xhr.open("GET", "http://localhost:8082/api/employee/all", true); // asynchroon
             xhr.send();
+        }
+
+        function verberg() {
+            document.getElementById("all-employees").innerHTML = ""; //clears the field
         }
 
         function updatesalaris() {
@@ -77,8 +81,6 @@
             xhr.open("PUT", "http://localhost:8082/api/employee/updatesalary/" + obj.id, true); //asynchroon 2
             xhr.setRequestHeader("Content-Type", "application/json")
             xhr.send(objJSON); //3
-
-
         }
 
 
@@ -87,7 +89,7 @@
 </head>
 
 <body>
-    <div id="add-employee">
+    <div>
         <h3>Voeg een medewerker toe</h3>
         <form>
             <input type="naam" id=naam value="Naam">
@@ -96,19 +98,15 @@
             <input type=button onclick="posten()" value="medewerker toevoegen">
         </form>
     </div>
-
     <br>
-
-    <div id="remove-employee">
+    <div>
         <h3>Verwijder een medewerker</h3>
         <form>
             <input type="id" id=id-employee value="medewerker ID">
             <input type=button onclick="verwijderen()" value="medewerker verwijderen">
         </form>
     </div>
-
     <br>
-
     <div>
         <h3>Pas de salaris aan van een medewerker</h3>
         <form>
@@ -120,8 +118,9 @@
     <br>
     <div>
         <form>
-            <h3></h3>
+            <br>
             <input type=button onclick="allemployees()" value="Laat alle medewerkers zien">
+            <input type=button onclick="verberg()" value="Verberg alle medewerkers">
             <p id="all-employees"></p>
         </form>
     </div>
