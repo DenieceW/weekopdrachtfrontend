@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+
+        function posten() {
+            let obj = {};
+            obj.name = document.getElementById("naam").value;
+            obj.salary = document.getElementById("salaris").value;
+            objJSON = JSON.stringify(obj);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST",  "http://localhost:8082/api/employee/new", true); //asynchroon 2
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.send(objJSON); //3
+            console.log("employee toegevoegd");
+        }
+
+        function verwijderen() {
+            let obj = {};
+            obj.id = document.getElementById("id-employee").value;
+            objJSON = JSON.stringify(obj);
+            console.log(obj.id)
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("DELETE", "http://localhost:8082/api/employee/delete/" + obj.id , true); //asynchroon 2
+            xhr.setRequestHeader("Content-Type", "application/json")
+            xhr.send(objJSON); //3
+            console.log("employee verwijderd");
+        }
+
+    </script>
+</head>
+
+<body>
+    <div id="add-employee">
+        <form>
+            <input type="naam" id=naam value="Naam">
+            <br>
+            <input type="salaris" id=salaris value="Salaris">
+            <input type=button onclick="posten()" value="employee toevoegen">
+        </form>
+    </div>
+
+    <br>
+
+    <div id="remove-employee">
+        <form>
+            <input type="id" id=id-employee value="id-employee">
+            <input type=button onclick="verwijderen()" value="employee verwijderen">
+        </form>
+    </div>
+
+</body>
+
+</html>
